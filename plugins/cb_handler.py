@@ -153,7 +153,7 @@ async def callback_handler(c: Client, cb: CallbackQuery):
             if ask_.text:
                 ascii_ = e = ''.join([i if (i in string.digits or i in string.ascii_letters or i == " ") else "" for i in ask_.text])
                 new_file_name = f"downloads/{str(cb.from_user.id)}/{ask_.text}.mkv"
-                await res.delete(True)
+                await ask_.delete(True)
             if user.merge_mode == 1:
                 await mergeNow(c, cb, new_file_name)
             elif user.merge_mode == 2:
