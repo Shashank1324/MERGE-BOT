@@ -1,6 +1,4 @@
-import asyncio
 import os
-import string
 
 from bot import (
     LOGGER,
@@ -149,11 +147,12 @@ async def callback_handler(c: Client, cb: CallbackQuery):
             await cb.message.edit(
                 "Current filename: **[@yashoswalyo]_merged.mkv**\n\nSend me new file name without extension: You have 1 minute"
             )
-            ask_: Message = await c.listen(cb.message.chat.id, timeout=300)
-            if ask_.text:
-                ascii_ = e = ''.join([i if (i in string.digits or i in string.ascii_letters or i == " ") else "" for i in ask_.text])
-                new_file_name = f"downloads/{str(cb.from_user.id)}/{ask_.text}.mkv"
-                await ask_.delete(True)
+            res: Message = await c.listen(
+                (cb.message.chat.id,None,None), filters=filters.text, timeout=150
+            )
+            if res.text:
+                new_file_name = f"downloads/{str(cb.from_user.id)}/{res.text}.mkv"
+                await res.delete(True)
             if user.merge_mode == 1:
                 await mergeNow(c, cb, new_file_name)
             elif user.merge_mode == 2:
@@ -408,7 +407,7 @@ async def callback_handler(c: Client, cb: CallbackQuery):
             cb.message, uid, cb.from_user.first_name, cb.from_user.last_name, user
         )
         return
-    
+
     elif cb.data.startswith('extract'):
         edata = cb.data.split('_')[1]
         media_mid = int(cb.data.split('_')[2])
