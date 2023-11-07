@@ -1,5 +1,6 @@
 import asyncio
 import os
+import string
 
 from bot import (
     LOGGER,
